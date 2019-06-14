@@ -1,0 +1,43 @@
+version: "3.1"
+services:
+  test_web:
+    build: ./nginx
+    ports:
+      - 81:80
+    volumes:
+      - ../src:/var/www
+    working_dir: /var/www
+  test_mysql:
+    build: ./mysql
+    ports:
+      - 3307:3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test
+      MYSQL_USER: tohid
+      MYSQL_PASSWORD: 123456
+    volumes:
+      - ../data/mysql:/var/lib/mysql
+      - ./mysql/conf:/etc/mysql/conf.d
+  test_adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
+  test_redis:
+    build: ./redis
+    ports:
+      - 6380:6379
+    volumes:
+      - ../data/redis:/data
+  test_mongo:
+      build: ./mongo
+      volumes:
+        - ../data/mongo:/etc/mongo
+      environment:
+         MONGO_INITDB_ROOT_USERNAME: root
+         MONGO_INITDB_ROOT_PASSWORD: secret
+         MONGO_INITDB_DATABASE: test
+      ports:
+       - 27018:27017
