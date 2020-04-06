@@ -34,3 +34,9 @@ RUN apk add --update  $PHPIZE_DEPS \
 RUN mkdir -p /var/log/supervisor
 ADD conf/supervisord.conf /etc/supervisord.conf
 RUN supervisorctl reread \ supervisorctl update \ supervisorctl start laravel-worker:*
+#####################################
+# Add docker user
+#####################################
+RUN addgroup -S docker
+RUN adduser -G docker -g "" -s /bin/sh -D docker
+RUN echo "docker ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
